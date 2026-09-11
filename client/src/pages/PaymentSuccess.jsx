@@ -1,25 +1,36 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FaCheckCircle } from 'react-icons/fa';
+import { Link } from "react-router-dom";
+import { FaCheckCircle } from "react-icons/fa";
 
 const PaymentSuccess = () => {
-    return (
-        <div className="min-h-[70vh] flex flex-col items-center justify-center p-4">
-            <div className="bg-white p-10 rounded-3xl shadow-2xl max-w-md w-full text-center border-t-8 border-green-500 transform transition-all hover:-translate-y-1">
-                <FaCheckCircle className="text-green-500 text-7xl mx-auto mb-6 drop-shadow-sm" />
-                <h1 className="text-4xl font-black text-gray-900 mb-4">Booking Confirmed!</h1>
-                <p className="text-gray-500 mb-8 text-lg">Your ticket has been booked successfully. A confirmation email has been sent to your registered email address.</p>
-                <div className="space-y-4">
-                    <Link to="/dashboard" className="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-xl transition shadow-lg hover:shadow-xl">
-                        View My Tickets
-                    </Link>
-                    <Link to="/" className="block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-4 px-6 rounded-xl transition">
-                        Discover More Events
-                    </Link>
-                </div>
-            </div>
+  return (
+    <div className="flex min-h-[70vh] items-center justify-center px-5 py-12">
+      <div className="w-full max-w-md rounded-[2rem] border border-moss/20 bg-white p-8 text-center shadow-soft sm:p-10">
+        <FaCheckCircle className="mx-auto mb-6 text-6xl text-moss" />
+        <span className="eyebrow text-moss">All set</span>
+        <h1 className="display-heading mb-4 mt-3 text-4xl text-ink">
+          Booking confirmed
+        </h1>
+        <p className="mb-8 text-base leading-7 text-ink/55">
+          Your ticket has been booked successfully. A confirmation email has
+          been sent to your registered email address.
+        </p>
+        <div className="space-y-4">
+          <Link
+            to="/dashboard"
+            className="block w-full rounded-xl bg-moss px-6 py-4 font-bold text-white transition hover:bg-ink"
+          >
+            View My Tickets
+          </Link>
+          <Link
+            to="/"
+            className="block w-full rounded-xl bg-paper px-6 py-4 font-bold text-ink transition hover:bg-sun"
+          >
+            Discover More Events
+          </Link>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default PaymentSuccess;
