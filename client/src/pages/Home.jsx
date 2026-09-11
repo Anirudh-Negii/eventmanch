@@ -29,9 +29,9 @@ const Home = () => {
   return (
     <div className="mx-auto max-w-7xl px-5 py-8 lg:px-8 lg:py-12">
       <div className="relative mb-16 overflow-hidden rounded-[2rem] bg-ink text-white shadow-soft">
-        <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[url('https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=1400&auto=format&fit=crop')] bg-cover bg-center opacity-70 md:block"></div>
+        <div className="absolute inset-y-5 right-5 hidden w-[44%] rounded-[1.5rem] bg-[url('https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=1400&auto=format&fit=crop')] bg-cover bg-center opacity-70 md:block"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(232,111,81,0.35),transparent_35%)]"></div>
-        <div className="relative z-10 max-w-2xl px-7 py-14 sm:px-12 sm:py-20 md:px-16">
+        <div className="relative z-10 max-w-2xl px-7 py-14 sm:px-12 sm:py-20 md:max-w-[54%] md:px-16 md:pr-10">
           <span className="eyebrow text-sun">Your city, in full colour</span>
           <h1 className="display-heading mt-6 text-5xl leading-[0.98] sm:text-7xl">
             Make plans worth <span className="text-coral">remembering.</span>
