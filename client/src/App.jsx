@@ -1,5 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useContext } from "react";
 import Navbar from "./components/Navbar";
+import { AuthContext } from "./context/AuthContext";
 import Home from "./pages/Home";
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
@@ -9,6 +11,16 @@ import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailed from "./pages/PaymentFailed";
+
+function AdminOnlyRoute({ children }) {
+  const { user } = useContext(AuthContext);
+
+  if (user?.role === "admin") {
+    return children;
+  }
+
+  return <Navigate to={user ? "/dashboard" : "/login"} replace />;
+}
 
 function App() {
   return (
@@ -24,8 +36,22 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/payment-success" element={<PaymentSuccess />} />
-            <Route path="/payment-failed" element={<PaymentFailed />} />
+            <Route
+              path="/payment-success"
+              element={
+                <AdminOnlyRoute>
+                  <PaymentSuccess />
+                </AdminOnlyRoute>
+              }
+            />
+            <Route
+              path="/payment-failed"
+              element={
+                <AdminOnlyRoute>
+                  <PaymentFailed />
+                </AdminOnlyRoute>
+              }
+            />
             <Route
               path="*"
               element={
