@@ -14,6 +14,7 @@ const AdminDashboard = () => {
 
   const [showEventForm, setShowEventForm] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
+  const [validationErrors, setValidationErrors] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -24,6 +25,12 @@ const AdminDashboard = () => {
     ticketPrice: "",
     image: "",
   });
+  const today = new Date();
+  const minEventDate = new Date(
+    today.getTime() - today.getTimezoneOffset() * 60000,
+  )
+    .toISOString()
+    .split("T")[0];
 
   useEffect(() => {
     if (!user || user.role !== "admin") {
@@ -50,9 +57,11 @@ const AdminDashboard = () => {
 
   const handleCreateEvent = async (e) => {
     e.preventDefault();
+    setValidationErrors([]);
     try {
       await api.post("/events", formData);
       setShowEventForm(false);
+      setValidationErrors([]);
       setFormData({
         title: "",
         description: "",
@@ -66,6 +75,10 @@ const AdminDashboard = () => {
       fetchData();
       toast.success("Event created successfully");
     } catch (error) {
+      const errors = error.response?.data?.errors;
+      if (Array.isArray(errors)) {
+        setValidationErrors(errors);
+      }
       toast.error(error.response?.data?.message || "Error creating event");
     }
   };
@@ -98,9 +111,7 @@ const AdminDashboard = () => {
       fetchData();
       toast.success("Booking cancelled successfully");
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Error cancelling booking",
-      );
+      toast.error(error.response?.data?.message || "Error cancelling booking");
     }
   };
 
@@ -124,7 +135,10 @@ const AdminDashboard = () => {
           </p>
         </div>
         <button
-          onClick={() => setShowEventForm(!showEventForm)}
+          onClick={() => {
+            setShowEventForm(!showEventForm);
+            setValidationErrors([]);
+          }}
           className="w-full rounded-xl bg-coral px-6 py-3 font-bold text-white transition hover:bg-sun hover:text-ink md:w-auto"
         >
           {showEventForm ? "Cancel Creation" : "+ Create New Event"}
@@ -188,6 +202,19 @@ const AdminDashboard = () => {
           <h2 className="text-2xl font-bold mb-6 text-gray-800">
             Create New Event
           </h2>
+          {validationErrors.length > 0 && (
+            <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              <p className="font-bold">Please fix the following:</p>
+              <ul className="mt-2 list-disc space-y-1 pl-5">
+                {validationErrors.map((error, index) => (
+                  <li key={`${error.field}-${index}`}>
+                    <span className="font-semibold">{error.field}:</span>{" "}
+                    {error.message}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <form
             onSubmit={handleCreateEvent}
             className="grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -195,6 +222,7 @@ const AdminDashboard = () => {
             <input
               required
               type="text"
+              minLength={3}
               placeholder="Event Title"
               className="border px-4 py-3 rounded-lg focus:ring-2 focus:ring-gray-700 outline-none transition"
               value={formData.title}
@@ -215,6 +243,7 @@ const AdminDashboard = () => {
             <input
               required
               type="date"
+              min={minEventDate}
               className="border px-4 py-3 rounded-lg focus:ring-2 focus:ring-gray-700 outline-none transition"
               value={formData.date}
               onChange={(e) =>
@@ -234,6 +263,7 @@ const AdminDashboard = () => {
             <input
               required
               type="number"
+              min={1}
               placeholder="Total Seats"
               className="border px-4 py-3 rounded-lg focus:ring-2 focus:ring-gray-700 outline-none transition"
               value={formData.totalSeats}
@@ -244,6 +274,7 @@ const AdminDashboard = () => {
             <input
               required
               type="number"
+              min={0}
               placeholder="Ticket Price (0 for free)"
               className="border px-4 py-3 rounded-lg focus:ring-2 focus:ring-gray-700 outline-none transition"
               value={formData.ticketPrice}
@@ -266,6 +297,7 @@ const AdminDashboard = () => {
 
             <textarea
               required
+              minLength={20}
               placeholder="Event Description"
               className="border px-4 py-3 rounded-lg md:col-span-2 h-32 focus:ring-2 focus:ring-gray-700 outline-none transition"
               value={formData.description}
@@ -321,10 +353,13 @@ const AdminDashboard = () => {
                         </span>
                       </div>
                     </div>
-                        <button
-                          onClick={() =>
-                            setPendingAction({ type: "delete-event", id: event._id })
-                          }
+                    <button
+                      onClick={() =>
+                        setPendingAction({
+                          type: "delete-event",
+                          id: event._id,
+                        })
+                      }
                       className="w-full sm:w-auto text-red-500 hover:text-white hover:bg-red-500 border border-red-200 px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm shrink-0"
                     >
                       Delete
@@ -440,7 +475,10 @@ const AdminDashboard = () => {
                         </button>
                         <button
                           onClick={() =>
-                            setPendingAction({ type: "cancel-booking", id: booking._id })
+                            setPendingAction({
+                              type: "cancel-booking",
+                              id: booking._id,
+                            })
                           }
                           className="w-[80px] bg-red-50 text-red-600 hover:bg-red-500 hover:text-white border border-red-200 text-xs font-bold py-2.5 px-3 rounded-lg transition"
                         >
@@ -468,7 +506,9 @@ const AdminDashboard = () => {
             : "This booking request will be cancelled and the user will lose their reservation."
         }
         confirmLabel={
-          pendingAction?.type === "delete-event" ? "Delete event" : "Cancel booking"
+          pendingAction?.type === "delete-event"
+            ? "Delete event"
+            : "Cancel booking"
         }
         onConfirm={() =>
           pendingAction?.type === "delete-event"
