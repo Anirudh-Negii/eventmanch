@@ -4,12 +4,14 @@ import api from "../utils/axios";
 import { Link, useNavigate } from "react-router-dom";
 import { FaTicketAlt, FaTimesCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
+import ConfirmModal from "../components/ConfirmModal";
 
 const UserDashboard = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [bookingToCancel, setBookingToCancel] = useState(null);
 
   useEffect(() => {
     if (!user) {
@@ -30,19 +32,16 @@ const UserDashboard = () => {
     }
   };
 
-  const cancelBooking = async (id) => {
-    if (
-      window.confirm("Are you sure you want to cancel this booking request?")
-    ) {
-      try {
-        await api.delete(`/bookings/${id}`);
-        fetchBookings();
-        toast.success("Booking cancelled successfully");
-      } catch (error) {
-        toast.error(
-          error.response?.data?.message || "Error cancelling booking",
-        );
-      }
+  const cancelBooking = async () => {
+    try {
+      await api.delete(`/bookings/${bookingToCancel}`);
+      setBookingToCancel(null);
+      fetchBookings();
+      toast.success("Booking cancelled successfully");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Error cancelling booking",
+      );
     }
   };
 
@@ -163,7 +162,7 @@ const UserDashboard = () => {
                       View event
                     </Link>
                     <button
-                      onClick={() => cancelBooking(booking._id)}
+                      onClick={() => setBookingToCancel(booking._id)}
                       className="text-red-500 font-semibold text-sm hover:text-red-700 transition flex items-center gap-1"
                     >
                       <FaTimesCircle /> Cancel
@@ -179,6 +178,14 @@ const UserDashboard = () => {
           ))}
         </div>
       )}
+      <ConfirmModal
+        isOpen={Boolean(bookingToCancel)}
+        title="Cancel this booking?"
+        message="This booking request will be cancelled and your seat will be released."
+        confirmLabel="Cancel booking"
+        onConfirm={cancelBooking}
+        onClose={() => setBookingToCancel(null)}
+      />
     </div>
   );
 };

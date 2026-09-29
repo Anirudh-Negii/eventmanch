@@ -3,6 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import api from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import ConfirmModal from "../components/ConfirmModal";
 
 const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -12,6 +13,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   const [showEventForm, setShowEventForm] = useState(false);
+  const [pendingAction, setPendingAction] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -69,14 +71,13 @@ const AdminDashboard = () => {
   };
 
   const handleDeleteEvent = async (id) => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
-      try {
-        await api.delete(`/events/${id}`);
-        fetchData();
-        toast.success("Event deleted successfully");
-      } catch (error) {
-        toast.error(error.response?.data?.message || "Error deleting event");
-      }
+    try {
+      await api.delete(`/events/${id}`);
+      setPendingAction(null);
+      fetchData();
+      toast.success("Event deleted successfully");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error deleting event");
     }
   };
 
@@ -91,16 +92,15 @@ const AdminDashboard = () => {
   };
 
   const handleCancelBooking = async (id) => {
-    if (window.confirm("Cancel this user's booking request?")) {
-      try {
-        await api.delete(`/bookings/${id}`);
-        fetchData();
-        toast.success("Booking cancelled successfully");
-      } catch (error) {
-        toast.error(
-          error.response?.data?.message || "Error cancelling booking",
-        );
-      }
+    try {
+      await api.delete(`/bookings/${id}`);
+      setPendingAction(null);
+      fetchData();
+      toast.success("Booking cancelled successfully");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Error cancelling booking",
+      );
     }
   };
 
@@ -321,8 +321,10 @@ const AdminDashboard = () => {
                         </span>
                       </div>
                     </div>
-                    <button
-                      onClick={() => handleDeleteEvent(event._id)}
+                        <button
+                          onClick={() =>
+                            setPendingAction({ type: "delete-event", id: event._id })
+                          }
                       className="w-full sm:w-auto text-red-500 hover:text-white hover:bg-red-500 border border-red-200 px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm shrink-0"
                     >
                       Delete
@@ -437,7 +439,9 @@ const AdminDashboard = () => {
                           ✓ Approve Undecided
                         </button>
                         <button
-                          onClick={() => handleCancelBooking(booking._id)}
+                          onClick={() =>
+                            setPendingAction({ type: "cancel-booking", id: booking._id })
+                          }
                           className="w-[80px] bg-red-50 text-red-600 hover:bg-red-500 hover:text-white border border-red-200 text-xs font-bold py-2.5 px-3 rounded-lg transition"
                         >
                           ✕ Reject
@@ -451,6 +455,28 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+      <ConfirmModal
+        isOpen={Boolean(pendingAction)}
+        title={
+          pendingAction?.type === "delete-event"
+            ? "Delete this event?"
+            : "Cancel this booking?"
+        }
+        message={
+          pendingAction?.type === "delete-event"
+            ? "This event and its listing will be removed from EventManch."
+            : "This booking request will be cancelled and the user will lose their reservation."
+        }
+        confirmLabel={
+          pendingAction?.type === "delete-event" ? "Delete event" : "Cancel booking"
+        }
+        onConfirm={() =>
+          pendingAction?.type === "delete-event"
+            ? handleDeleteEvent(pendingAction.id)
+            : handleCancelBooking(pendingAction.id)
+        }
+        onClose={() => setPendingAction(null)}
+      />
     </div>
   );
 };
