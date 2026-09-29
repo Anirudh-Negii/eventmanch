@@ -11,6 +11,7 @@ import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailed from "./pages/PaymentFailed";
+import NotFound from "./pages/NotFound";
 
 function AdminOnlyRoute({ children }) {
   const { user } = useContext(AuthContext);
@@ -52,14 +53,7 @@ function App() {
                 </AdminOnlyRoute>
               }
             />
-            <Route
-              path="*"
-              element={
-                <h1 className="text-3xl font-bold text-center mt-20">
-                  404 - Page Not Found
-                </h1>
-              }
-            />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
       </div>
