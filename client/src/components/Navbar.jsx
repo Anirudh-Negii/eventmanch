@@ -26,7 +26,7 @@ const Navbar = () => {
         </Link>
         <div className="flex items-center gap-4 text-sm font-semibold sm:gap-7">
           <Link
-            to="/"
+            to="/events"
             className="hidden text-ink/65 transition hover:text-coral sm:block"
           >
             Explore events

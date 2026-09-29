@@ -4,7 +4,7 @@ EventManch is a full-stack MERN (MongoDB, Express.js, React, Node.js) event book
 
 # Live Demo
 
-[EventManch — Live Project](https://eventora-bookings.vercel.app)
+[EventManch — Live Project](https://eventmanch.vercel.app)
 
 ## Project Overview
 
