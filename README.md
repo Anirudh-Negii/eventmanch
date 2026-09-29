@@ -1,14 +1,14 @@
-# Eventora
+# EventManch
 
-Eventora is a full-stack MERN (MongoDB, Express.js, React, Node.js) event booking platform with OTP-based verification, role-based dashboards, and admin-managed booking confirmations.
+EventManch is a full-stack MERN (MongoDB, Express.js, React, Node.js) event booking platform with OTP-based verification, role-based dashboards, and admin-managed booking confirmations.
 
 # Live Demo
 
-[Eventora — Live Project](https://eventora-bookings.vercel.app)
+[EventManch — Live Project](https://eventora-bookings.vercel.app)
 
 ## Project Overview
 
-Eventora allows users to discover events, view event details, submit booking requests with OTP-based verification, and track or cancel their bookings from a personal dashboard. Admins can create and manage events, review booking requests, and confirm or cancel bookings. The platform uses JWT-based authentication, role-based access control, MongoDB-backed persistence, and email-based verification and booking notifications.
+EventManch allows users to discover events, view event details, submit booking requests with OTP-based verification, and track or cancel their bookings from a personal dashboard. Admins can create and manage events, review booking requests, and confirm or cancel bookings. The platform uses JWT-based authentication, role-based access control, MongoDB-backed persistence, and email-based verification and booking notifications.
 
 ## Features
 
@@ -51,7 +51,7 @@ High-level flow:
 ## Project Structure
 
 ```text
-Eventora/
+EventManch/
 ├── assets/
 │   ├── docs/                 # DFD, flowcharts, and supporting documentation
 │   └── screenshots/          # UI snapshots

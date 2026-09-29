@@ -188,7 +188,7 @@ const Home = () => {
         <div className="flex justify-center items-center gap-2 mb-4">
           <FaTicketAlt className="text-coral text-2xl" />
           <span className="font-display text-xl font-bold text-ink">
-            Eventora
+            EventManch
           </span>
         </div>
         <p className="text-gray-500 text-sm mb-6 max-w-md mx-auto">
@@ -196,7 +196,7 @@ const Home = () => {
           world-class events in your local city. Let's make memories together.
         </p>
         <div className="text-xs text-gray-400 font-medium uppercase tracking-wider">
-          &copy; {new Date().getFullYear()} Eventora Platform. All rights
+          &copy; {new Date().getFullYear()} EventManch Platform. All rights
           reserved.
         </div>
       </footer>

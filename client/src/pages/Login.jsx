@@ -53,7 +53,7 @@ const Login = () => {
           where you left off.
         </p>
         <div className="mt-20 border-t border-white/15 pt-5 font-mono text-xs text-white/45">
-          EVENTORA / MEMBER ACCESS
+          EVENTMANCH / MEMBER ACCESS
         </div>
       </div>
       <div className="mx-auto w-full max-w-md rounded-[2rem] border border-ink/10 bg-white p-7 shadow-soft sm:p-10">
@@ -63,7 +63,7 @@ const Login = () => {
             Welcome back
           </h2>
           <p className="mt-2 text-sm text-ink/55">
-            Sign in to your Eventora account
+            Sign in to your EventManch account
           </p>
         </div>
 

@@ -10,61 +10,61 @@ dotenv.config();
 const users = [
   {
     name: "Anirudh Negi",
-    email: "anirudh@eventora.com",
+    email: "anirudh@eventmanch.com",
     password: "admin@567",
     role: "admin",
   },
   {
     name: "Head Admin",
-    email: "headadmin@eventora.com",
+    email: "headadmin@eventmanch.com",
     password: "admin@567",
     role: "admin",
   },
   {
     name: "Aarav Mehta",
-    email: "aarav@eventora.com",
+    email: "aarav@eventmanch.com",
     password: "user@789",
     role: "user",
   },
   {
     name: "Priya Verma",
-    email: "priya@eventora.com",
+    email: "priya@eventmanch.com",
     password: "user@789",
     role: "user",
   },
   {
     name: "Rohan Kapoor",
-    email: "rohan@eventora.com",
+    email: "rohan@eventmanch.com",
     password: "user@789",
     role: "user",
   },
   {
     name: "Sneha Patel",
-    email: "sneha@eventora.com",
+    email: "sneha@eventmanch.com",
     password: "user@789",
     role: "user",
   },
   {
     name: "Arjun Singh",
-    email: "arjun@eventora.com",
+    email: "arjun@eventmanch.com",
     password: "user@789",
     role: "user",
   },
   {
     name: "Kavya Nair",
-    email: "kavya@eventora.com",
+    email: "kavya@eventmanch.com",
     password: "user@789",
     role: "user",
   },
   {
     name: "Aditya Joshi",
-    email: "aditya@eventora.com",
+    email: "aditya@eventmanch.com",
     password: "user@789",
     role: "user",
   },
   {
     name: "Neha Gupta",
-    email: "neha@eventora.com",
+    email: "neha@eventmanch.com",
     password: "user@789",
     role: "user",
   },
@@ -205,7 +205,7 @@ const events = [
 const seedDatabase = async () => {
   try {
     await mongoose.connect(
-      process.env.MONGO_URI || "mongodb://localhost:27017/eventora",
+      process.env.MONGO_URI || "mongodb://localhost:27017/eventmanch",
     );
 
     await User.deleteMany();

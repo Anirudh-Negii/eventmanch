@@ -1,7 +1,7 @@
 {
-    "name": "eventora-server",
+    "name": "eventmanch-server",
     "version": "1.0.0",
-    "description": "Eventora Backend",
+    "description": "EventManch Backend",
     "main": "server.js",
     "scripts": {
         "start": "node server.js",

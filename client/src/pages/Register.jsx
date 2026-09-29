@@ -141,7 +141,7 @@ const Register = () => {
           Go where the good energy is.
         </h1>
         <p className="mt-8 max-w-md leading-7 text-ink/70">
-          From intimate workshops to city-wide celebrations, Eventora helps you
+                From intimate workshops to city-wide celebrations, EventManch helps you
           make space for the things you care about.
         </p>
       </div>

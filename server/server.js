@@ -22,7 +22,7 @@ app.use('/api/bookings', bookingRoutes);
 
 // Database Connection
 mongoose
-  .connect(process.env.MONGO_URI || 'mongodb://localhost:27017/eventora')
+  .connect(process.env.MONGO_URI || 'mongodb://localhost:27017/eventmanch')
   .catch(err => console.error('MongoDB Connection Error:', err));
 
 const PORT = process.env.PORT || 5000;

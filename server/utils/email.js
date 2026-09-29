@@ -9,7 +9,7 @@ const sendBookingEmail = async (userEmail, userName, eventTitle) => {
             'https://api.brevo.com/v3/smtp/email',
             {
                 sender: {
-                    name: 'Eventora',
+                    name: 'EventManch',
                     email: process.env.EMAIL_USER
                 },
                 to: [
@@ -25,7 +25,7 @@ const sendBookingEmail = async (userEmail, userName, eventTitle) => {
                         <strong>${eventTitle}</strong>
                         is successfully confirmed.
                     </p>
-                    <p>Thank you for choosing Eventora.</p>
+                        <p>Thank you for choosing EventManch.</p>
                 `
             },
             {
@@ -48,19 +48,19 @@ const sendOTPEmail = async (userEmail, otp, type) => {
     try {
         const title =
             type === 'account_verification'
-                ? 'Verify your Eventora Account'
-                : 'Eventora Booking Verification';
+                ? 'Verify your EventManch Account'
+                : 'EventManch Booking Verification';
 
         const msg =
             type === 'account_verification'
-                ? 'Please use the following OTP to verify your new Eventora account.'
+                ? 'Please use the following OTP to verify your new EventManch account.'
                 : 'Please use the following OTP to verify and confirm your event booking.';
 
         await axios.post(
             'https://api.brevo.com/v3/smtp/email',
             {
                 sender: {
-                    name: 'Eventora',
+                    name: 'EventManch',
                     email: process.env.EMAIL_USER
                 },
                 to: [
