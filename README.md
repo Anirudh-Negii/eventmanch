@@ -52,9 +52,6 @@ High-level flow:
 
 ```text
 EventManch/
-├── assets/
-│   ├── docs/                 # DFD, flowcharts, and supporting documentation
-│   └── screenshots/          # UI snapshots
 ├── client/
 │   ├── src/
 │   │   ├── components/       # Shared UI components (e.g., Navbar)
@@ -69,6 +66,7 @@ EventManch/
 │   ├── models/               # Mongoose models (User, Event, Booking, OTP)
 │   ├── routes/               # API route modules (auth, events, bookings)
 │   ├── utils/email.js        # Email API integration + OTP/booking email helpers
+|   ├── validator/            # Validation logic for request data
 │   ├── seed.js               # Seed script for demo users/events/bookings
 │   ├── server.js             # Express app bootstrap + DB connection
 │   └── package.json
