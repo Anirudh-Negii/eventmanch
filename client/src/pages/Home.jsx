@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../utils/axios";
-import { FaCalendarAlt, FaMapMarkerAlt, FaSearch, FaRegClock, FaTicketAlt, FaShieldAlt } from "react-icons/fa";
+import { FaCalendarAlt, FaMapMarkerAlt, FaSearch, FaRegClock, FaTicketAlt, FaShieldAlt, FaHeart } from "react-icons/fa";
+import eventmanchLogo from "../../assets/eventmanch-logo.png";
 
 const Home = () => {
   const [events, setEvents] = useState([]);
@@ -184,20 +185,23 @@ const Home = () => {
         </div>
       )}
 
-      <footer className="mt-24 border-t border-ink/10 pb-8 pt-10 text-center">
-        <div className="flex justify-center items-center gap-2 mb-4">
-          <FaTicketAlt className="text-coral text-2xl" />
-          <span className="font-display text-xl font-bold text-ink">
-            EventManch
-          </span>
-        </div>
-        <p className="text-gray-500 text-sm mb-6 max-w-md mx-auto">
-          The simplest, most dynamic way to manage, discover, and host
-          world-class events in your local city. Let's make memories together.
-        </p>
-        <div className="text-xs text-gray-400 font-medium uppercase tracking-wider">
-          &copy; {new Date().getFullYear()} EventManch Platform. All rights
-          reserved.
+      <footer className="mt-24 border-t border-ink/10 pb-8 pt-8">
+        <div className="grid grid-cols-1 items-center gap-6 text-center text-sm md:grid-cols-3 md:text-left">
+          <div className="flex justify-center md:justify-start">
+            <img
+              src={eventmanchLogo}
+              alt="EventManch"
+              className="h-12 w-40 object-contain"
+              draggable={false}
+            />
+          </div>
+          <p className="flex items-center justify-center gap-2 text-ink/60">
+            Made with <FaHeart className="text-coral" aria-hidden="true" /> by
+            <span className="font-semibold text-ink">Anirudh</span>
+          </p>
+          <p className="text-xs font-medium uppercase tracking-wider text-ink/45 md:text-right">
+            &copy; {new Date().getFullYear()} EventManch. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
