@@ -7,6 +7,10 @@ import eventmanchLogo from "../../assets/eventmanch-logo.png";
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const firstName = user?.name?.trim().split(/\s+/)[0];
+  const displayName = firstName
+    ? `${firstName.charAt(0).toUpperCase()}${firstName.slice(1).toLowerCase()}`
+    : "";
 
   const handleLogout = () => {
     logout();
@@ -39,6 +43,9 @@ const Navbar = () => {
               >
                 Dashboard
               </Link>
+              <span className="text-ink" aria-label="Logged-in user">
+                {displayName}
+              </span>
               <button
                 onClick={handleLogout}
                 className="group flex items-center gap-2 rounded-full bg-ink px-4 py-2.5 text-white transition hover:bg-coral"
