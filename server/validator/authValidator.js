@@ -57,6 +57,37 @@ const verifyOtpValidator = [
     .withMessage("OTP must contain only digits."),
 ];
 
+const passwordResetRequestValidator = [
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("Email is required.")
+    .bail()
+    .isEmail()
+    .withMessage("Please provide a valid email address.")
+    .normalizeEmail(),
+];
+
+const passwordResetValidator = [
+  ...passwordResetRequestValidator,
+  body("otp")
+    .trim()
+    .notEmpty()
+    .withMessage("OTP is required.")
+    .bail()
+    .isLength({ min: 6, max: 6 })
+    .withMessage("OTP must contain exactly 6 digits.")
+    .bail()
+    .isNumeric()
+    .withMessage("OTP must contain only digits."),
+  body("newPassword")
+    .notEmpty()
+    .withMessage("New password is required.")
+    .bail()
+    .isLength({ min: 6, max: 128 })
+    .withMessage("New password must be between 6 and 128 characters."),
+];
+
 const profileUpdateValidator = [
   body("name")
     .optional()
@@ -91,5 +122,7 @@ module.exports = {
   registerValidator,
   loginValidator,
   verifyOtpValidator,
+  passwordResetRequestValidator,
+  passwordResetValidator,
   profileUpdateValidator,
 };

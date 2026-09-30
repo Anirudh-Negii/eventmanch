@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { FaEye, FaEyeSlash, FaTimes, FaUserCircle } from "react-icons/fa";
+import { FaTimes, FaUserCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { AuthContext } from "../context/AuthContext";
+import PasswordInput from "./PasswordInput";
 
 const ProfileModal = ({ onClose }) => {
   const { user, updateProfile } = useContext(AuthContext);
@@ -10,9 +11,6 @@ const ProfileModal = ({ onClose }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -142,77 +140,34 @@ const ProfileModal = ({ onClose }) => {
               Change password
             </p>
             <div className="space-y-4">
-              <div className="relative">
-                <input
-                  type={showCurrentPassword ? "text" : "password"}
-                  aria-label="Current password"
-                  placeholder="Current password"
-                  autoComplete="current-password"
-                  className="field pr-12"
-                  value={currentPassword}
-                  onChange={(event) => setCurrentPassword(event.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowCurrentPassword((visible) => !visible)}
-                  aria-label={
-                    showCurrentPassword
-                      ? "Hide current password"
-                      : "Show current password"
-                  }
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-ink/45 transition hover:text-coral"
-                >
-                  {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-              <div className="relative">
-                <input
-                  type={showNewPassword ? "text" : "password"}
-                  aria-label="New password"
-                  placeholder="New password"
-                  minLength="6"
-                  maxLength="128"
-                  autoComplete="new-password"
-                  className="field pr-12"
-                  value={newPassword}
-                  onChange={(event) => setNewPassword(event.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowNewPassword((visible) => !visible)}
-                  aria-label={
-                    showNewPassword ? "Hide new password" : "Show new password"
-                  }
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-ink/45 transition hover:text-coral"
-                >
-                  {showNewPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-              <div className="relative">
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  aria-label="Confirm new password"
-                  placeholder="Confirm new password"
-                  minLength="6"
-                  maxLength="128"
-                  autoComplete="new-password"
-                  className="field pr-12"
-                  value={confirmPassword}
-                  onChange={(event) => setConfirmPassword(event.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword((visible) => !visible)}
-                  aria-label={
-                    showConfirmPassword
-                      ? "Hide password confirmation"
-                      : "Show password confirmation"
-                  }
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-ink/45 transition hover:text-coral"
-                >
-                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
+              <PasswordInput
+                id="profile-current-password"
+                aria-label="Current password"
+                placeholder="Current password"
+                autoComplete="current-password"
+                value={currentPassword}
+                onChange={(event) => setCurrentPassword(event.target.value)}
+              />
+              <PasswordInput
+                id="profile-new-password"
+                aria-label="New password"
+                placeholder="New password"
+                minLength="6"
+                maxLength="128"
+                autoComplete="new-password"
+                value={newPassword}
+                onChange={(event) => setNewPassword(event.target.value)}
+              />
+              <PasswordInput
+                id="profile-confirm-password"
+                aria-label="Confirm new password"
+                placeholder="Confirm new password"
+                minLength="6"
+                maxLength="128"
+                autoComplete="new-password"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+              />
             </div>
           </div>
 

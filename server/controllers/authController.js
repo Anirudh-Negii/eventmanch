@@ -93,6 +93,48 @@ exports.verifyOTP = async (req, res) => {
     }
 };
 
+exports.requestPasswordReset = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+
+        if (user) {
+            const otp = generateOTP();
+            await OTP.findOneAndDelete({ email, action: 'password_reset' });
+            await OTP.create({ email, otp, action: 'password_reset' });
+            await sendOTPEmail(email, otp, 'password_reset');
+        }
+
+        res.json({ message: 'If an account exists for this email, a reset OTP has been sent.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Unable to send password reset OTP' });
+    }
+};
+
+exports.resetPassword = async (req, res) => {
+    try {
+        const { email, otp, newPassword } = req.body;
+        const validOTP = await OTP.findOne({ email, otp, action: 'password_reset' });
+
+        if (!validOTP) {
+            return res.status(400).json({ message: 'Invalid or expired password reset OTP' });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: 'Unable to reset password for this account' });
+        }
+
+        user.password = await bcrypt.hash(newPassword, await bcrypt.genSalt(10));
+        await user.save();
+        await OTP.deleteOne({ _id: validOTP._id });
+
+        res.json({ message: 'Password reset successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Unable to reset password' });
+    }
+};
+
 exports.updateProfile = async (req, res) => {
     try {
         const { name, currentPassword, newPassword } = req.body;

@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import PasswordInput from "../components/PasswordInput";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -80,18 +81,16 @@ const Register = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-ink">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  required
-                  className="field"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
+              <PasswordInput
+                id="register-password"
+                label="Password"
+                required
+                minLength="6"
+                maxLength="128"
+                autoComplete="new-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </>
           ) : (
             <div>

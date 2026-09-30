@@ -49,6 +49,24 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const requestPasswordReset = async (email) => {
+        try {
+            const { data } = await api.post('/auth/request-password-reset', { email });
+            return data;
+        } catch (error) {
+            throw error.response?.data?.message || 'Unable to send password reset OTP';
+        }
+    };
+
+    const resetPassword = async (email, otp, newPassword) => {
+        try {
+            const { data } = await api.post('/auth/reset-password', { email, otp, newPassword });
+            return data;
+        } catch (error) {
+            throw error.response?.data?.message || 'Unable to reset password';
+        }
+    };
+
     const updateProfile = async (profileData) => {
         try {
             const { data } = await api.put('/auth/profile', profileData);
@@ -71,7 +89,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, register, verifyOTP, updateProfile, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, register, verifyOTP, requestPasswordReset, resetPassword, updateProfile, logout, loading }}>
             {!loading && children}
         </AuthContext.Provider>
     );

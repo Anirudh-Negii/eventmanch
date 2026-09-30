@@ -1,24 +1,46 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import ConfirmModal from "../components/ConfirmModal";
+import PasswordInput from "../components/PasswordInput";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [otp, setOtp] = useState("");
   const [showOTP, setShowOTP] = useState(false);
+  const [resetStep, setResetStep] = useState("idle");
+  const [resetOtp, setResetOtp] = useState("");
+  const [resetPasswordValue, setResetPasswordValue] = useState("");
+  const [confirmResetPassword, setConfirmResetPassword] = useState("");
+  const [showResetConfirmation, setShowResetConfirmation] = useState(false);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { login, verifyOTP } = useContext(AuthContext);
+  const { login, verifyOTP, requestPasswordReset, resetPassword } =
+    useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setSuccessMessage("");
     try {
-      if (!showOTP) {
+      if (resetStep === "otp") {
+        if (resetPasswordValue !== confirmResetPassword) {
+          setError("New passwords do not match.");
+          return;
+        }
+
+        await resetPassword(email, resetOtp, resetPasswordValue);
+        setResetStep("idle");
+        setResetOtp("");
+        setResetPasswordValue("");
+        setConfirmResetPassword("");
+        setSuccessMessage("Password reset successfully. You can now sign in.");
+      } else if (!showOTP) {
         const data = await login(email, password);
         if (data.role === "admin") navigate("/admin");
         else navigate("/dashboard");
@@ -36,6 +58,38 @@ const Login = () => {
       } else {
         setError(err.message || err);
       }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = (event) => {
+    event.preventDefault();
+    setError("");
+    setSuccessMessage("");
+
+    if (!email.trim()) {
+      setError("Enter your email address first.");
+      return;
+    }
+
+    setShowResetConfirmation(true);
+  };
+
+  const handleSendResetOtp = async () => {
+    if (loading) return;
+
+    setLoading(true);
+    setError("");
+    try {
+      await requestPasswordReset(email.trim());
+      setShowResetConfirmation(false);
+      setResetStep("otp");
+      setSuccessMessage(
+        "If an account exists for this email, a password reset OTP has been sent.",
+      );
+    } catch (resetError) {
+      setError(resetError.message || resetError);
     } finally {
       setLoading(false);
     }
@@ -72,9 +126,14 @@ const Login = () => {
             {error}
           </div>
         )}
+        {successMessage && (
+          <div className="mb-6 rounded-xl border border-moss/20 bg-mist p-3 text-center text-sm text-moss">
+            {successMessage}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {!showOTP ? (
+          {resetStep === "otp" ? (
             <>
               <div>
                 <label className="mb-2 block text-sm font-semibold text-ink">
@@ -90,15 +149,70 @@ const Login = () => {
               </div>
               <div>
                 <label className="mb-2 block text-sm font-semibold text-ink">
-                  Password
+                  Password reset OTP
                 </label>
                 <input
-                  type="password"
+                  type="text"
+                  required
+                  inputMode="numeric"
+                  placeholder="6-digit code"
+                  className="field text-center text-lg font-bold tracking-widest"
+                  value={resetOtp}
+                  onChange={(e) => setResetOtp(e.target.value)}
+                  maxLength="6"
+                />
+              </div>
+              <PasswordInput
+                id="reset-password"
+                label="New password"
+                required
+                minLength="6"
+                maxLength="128"
+                autoComplete="new-password"
+                value={resetPasswordValue}
+                onChange={(e) => setResetPasswordValue(e.target.value)}
+              />
+              <PasswordInput
+                id="confirm-reset-password"
+                label="Confirm new password"
+                required
+                minLength="6"
+                maxLength="128"
+                autoComplete="new-password"
+                value={confirmResetPassword}
+                onChange={(e) => setConfirmResetPassword(e.target.value)}
+              />
+            </>
+          ) : !showOTP ? (
+            <>
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-ink">
+                  Email address
+                </label>
+                <input
+                  type="email"
                   required
                   className="field"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
+              </div>
+              <PasswordInput
+                id="login-password"
+                label="Password"
+                required
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <div className="-mt-3 text-right">
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="text-sm font-semibold text-coral hover:underline"
+                >
+                  Forgot password?
+                </button>
               </div>
             </>
           ) : (
@@ -124,6 +238,8 @@ const Login = () => {
           >
             {loading
               ? "Processing..."
+              : resetStep === "otp"
+                ? "Reset Password"
               : showOTP
                 ? "Verify OTP & Log In"
                 : "Sign In"}
@@ -131,12 +247,20 @@ const Login = () => {
         </form>
 
         <p className="mt-8 text-center text-sm text-ink/55">
-          Don't have an account?{" "}
+          {resetStep === "otp" ? "Remember your password?" : "Don't have an account?"}{" "}
           <Link to="/register" className="font-bold text-coral hover:underline">
-            Sign up
+            {resetStep === "otp" ? "Sign in" : "Sign up"}
           </Link>
         </p>
       </div>
+      <ConfirmModal
+        isOpen={showResetConfirmation}
+        title="Reset your password?"
+        message={`Send a password reset OTP to ${email}?`}
+        confirmLabel={loading ? "Sending..." : "Send OTP"}
+        onConfirm={handleSendResetOtp}
+        onClose={() => setShowResetConfirmation(false)}
+      />
     </div>
   );
 };

@@ -49,12 +49,16 @@ const sendOTPEmail = async (userEmail, otp, type) => {
         const title =
             type === 'account_verification'
                 ? 'Verify your EventManch Account'
-                : 'EventManch Booking Verification';
+                : type === 'password_reset'
+                    ? 'Reset your EventManch Password'
+                    : 'EventManch Booking Verification';
 
         const msg =
             type === 'account_verification'
                 ? 'Please use the following OTP to verify your new EventManch account.'
-                : 'Please use the following OTP to verify and confirm your event booking.';
+                : type === 'password_reset'
+                    ? 'Please use the following OTP to reset your EventManch password.'
+                    : 'Please use the following OTP to verify and confirm your event booking.';
 
         await axios.post(
             'https://api.brevo.com/v3/smtp/email',
