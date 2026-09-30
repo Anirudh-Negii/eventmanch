@@ -1,12 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { FaArrowRight } from "react-icons/fa";
 import eventmanchLogo from "../../assets/eventmanch-logo.png";
+import ProfileModal from "./ProfileModal";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [showProfile, setShowProfile] = useState(false);
   const firstName = user?.name?.trim().split(/\s+/)[0];
   const displayName = firstName
     ? `${firstName.charAt(0).toUpperCase()}${firstName.slice(1).toLowerCase()}`
@@ -43,9 +45,14 @@ const Navbar = () => {
               >
                 Dashboard
               </Link>
-              <span className="text-ink" aria-label="Logged-in user">
+              <button
+                type="button"
+                onClick={() => setShowProfile(true)}
+                className="text-ink transition hover:text-coral"
+                aria-label="Open profile"
+              >
                 {displayName}
-              </span>
+              </button>
               <button
                 onClick={handleLogout}
                 className="group flex items-center gap-2 rounded-full bg-ink px-4 py-2.5 text-white transition hover:bg-coral"
@@ -72,6 +79,7 @@ const Navbar = () => {
             </>
           )}
         </div>
+        {showProfile && <ProfileModal onClose={() => setShowProfile(false)} />}
       </div>
     </nav>
   );

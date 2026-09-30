@@ -57,4 +57,39 @@ const verifyOtpValidator = [
     .withMessage("OTP must contain only digits."),
 ];
 
-module.exports = { registerValidator, loginValidator, verifyOtpValidator };
+const profileUpdateValidator = [
+  body("name")
+    .optional()
+    .trim()
+    .isLength({ min: 2, max: 80 })
+    .withMessage("Name must be between 2 and 80 characters."),
+  body("currentPassword")
+    .optional()
+    .isLength({ min: 6, max: 128 })
+    .withMessage("Current password must be between 6 and 128 characters."),
+  body("newPassword")
+    .optional()
+    .isLength({ min: 6, max: 128 })
+    .withMessage("New password must be between 6 and 128 characters."),
+  body().custom((value) => {
+    const hasName = typeof value.name === "string" && value.name.trim();
+    const hasNewPassword = Boolean(value.newPassword);
+
+    if (!hasName && !hasNewPassword) {
+      throw new Error("Provide a name or a new password to update.");
+    }
+
+    if (hasNewPassword && !value.currentPassword) {
+      throw new Error("Current password is required to set a new password.");
+    }
+
+    return true;
+  }),
+];
+
+module.exports = {
+  registerValidator,
+  loginValidator,
+  verifyOtpValidator,
+  profileUpdateValidator,
+};

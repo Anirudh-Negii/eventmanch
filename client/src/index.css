@@ -43,3 +43,38 @@ body {
   margin: 0;
   min-width: 320px;
 }
+
+@keyframes profile-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes profile-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-profile-backdrop {
+  animation: profile-backdrop-in 180ms ease-out both;
+}
+
+.animate-profile-panel {
+  animation: profile-panel-in 220ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-profile-backdrop,
+  .animate-profile-panel {
+    animation: none;
+  }
+}

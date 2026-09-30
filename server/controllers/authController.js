@@ -92,3 +92,38 @@ exports.verifyOTP = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
+
+exports.updateProfile = async (req, res) => {
+    try {
+        const { name, currentPassword, newPassword } = req.body;
+        const updates = {};
+
+        if (name !== undefined) {
+            updates.name = name;
+        }
+
+        if (newPassword) {
+            const userWithPassword = await User.findById(req.user.id);
+            const isMatch = await bcrypt.compare(currentPassword, userWithPassword.password);
+            if (!isMatch) {
+                return res.status(400).json({ message: 'Current password is incorrect' });
+            }
+
+            updates.password = await bcrypt.hash(newPassword, await bcrypt.genSalt(10));
+        }
+
+        const user = await User.findByIdAndUpdate(req.user.id, updates, {
+            new: true,
+            runValidators: true
+        }).select('-password');
+
+        res.json({
+            _id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
