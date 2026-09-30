@@ -22,6 +22,9 @@ EventManch allows users to discover events, view event details, submit booking r
 - Booking states (`pending`, `confirmed`, `cancelled`) and payment states (`paid`, `not_paid`).
 - Seat availability tracking with automatic updates on bookings and cancellations.
 - Automated email notifications for OTP verification and booking confirmations.
+- Admin-only routes protected by JWT middleware and role checks.
+- Validation of request payloads using express-validator to ensure data integrity.
+- Rate limiting on login endpoint to prevent brute-force attacks.
 - Seed script for quick local data setup.
 
 ## Tech Stack
@@ -29,7 +32,7 @@ EventManch allows users to discover events, view event details, submit booking r
 - Frontend: React, Vite, Tailwind CSS, React Router, Axios, React Icons.
 - Backend: Node.js, Express.js.
 - Database: MongoDB with Mongoose.
-- Authentication/Security: JWT, bcrypt.
+- Authentication/Security: JWT, bcrypt, express-validator, express-rate-limit.
 - Email Service: Brevo Transactional Email API.
 
 ## Architecture Overview
